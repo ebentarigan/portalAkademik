@@ -1,5 +1,5 @@
 <?php
-define('HOST', "http://localhost/webpro%202024-1_02/portalakademik/")
+define('HOST', "http://localhost/portalakademik/")
 ?>
 <!DOCTYPE html>
 <html lang="en">

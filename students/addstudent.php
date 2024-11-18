@@ -1,5 +1,11 @@
 <?php
 include "../dbconfig.php";
+// load data studyprogram
+
+$sqlStatement = "SELECT * FROM studyprograms";
+$query = mysqli_query($conn, $sqlStatement);
+$dtprodi = mysqli_fetch_all($query, MYSQLI_ASSOC);
+
 if (isset($_POST['btnSimpan'])) {
     $nim = $_POST["nim"];
     $kodeprodi = $_POST["kodeprodi"];
@@ -10,8 +16,18 @@ if (isset($_POST['btnSimpan'])) {
     $tanggal_lahir = $_POST["tanggallahir"];
     $alamat = $_POST["alamat"];
     $email = $_POST["email"];
+    $foto =$_FILES['foto'];
 
-    $sqlStatement = "INSERT INTO students VALUES ('$nim', '$kodeprodi', '$nama_depan', '$nama_tengah', '$nama_akhir', '$jenis_kelamin', '$tanggal_lahir','$alamat','$email',NULL)";
+
+    if(!empty($foto['name'])){
+        $photoName = time().'_'.$foto['name'];
+        move_uploaded_file($foto['tmp_name'],'../images/'.$photoName);
+    }else{
+        $photoName="";
+    }
+    
+
+    $sqlStatement = "INSERT INTO students VALUES ('$nim', '$kodeprodi', '$nama_depan', '$nama_tengah', '$nama_akhir', '$jenis_kelamin', '$tanggal_lahir','$alamat','$email','$photoName')";
     $query = mysqli_query($conn, $sqlStatement);
     if ($query) {
         $succesMsg = "Penambahan data mahasiswa dengan NIM " . $nim . " berhasil";
@@ -23,11 +39,7 @@ if (isset($_POST['btnSimpan'])) {
     mysqli_close($conn);
 }
 
-// load data studyprogram
 
-$sqlStatement = "SELECT * FROM studyprograms";
-$query = mysqli_query($conn, $sqlStatement);
-$dtprodi = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
 include "../template/mainheader.php";
 ?>
@@ -45,7 +57,7 @@ if (isset($errMsg)) {
 <?php
 }
 ?>
-<form method="post">
+<form method="post" enctype = "multipart/form-data">
     <div class="mb-1 row">
         <div class="col-2">
             <label for="nim" class="col-form-label">NIM</label>
@@ -125,6 +137,13 @@ if (isset($errMsg)) {
             <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
         </div>
     </div>
+    <div class ="mb-1 row">
+        <div calss ="col-2">
+            <label for ="foto" class="col-form-label">foto</label>
+        </div>
+        <div class ="col-auto">
+                <input class ="form-control" type="file" id="foto" name = "foto">
+        </div>
     <div class="mt-4 row">
         <div class="col-auto">
             <input type="submit" class="btn btn-success" name="btnSimpan" value="Simpan">

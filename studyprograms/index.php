@@ -1,5 +1,5 @@
 <?php
-include "../dbconfig.php";
+include "../db_config.php";
 
 $sqlStatement = "SELECT sp.kodeProdi, sp.namaProdi, sp.kaprodi, 
            (SELECT COUNT(*) FROM students s WHERE s.kodeProdi = sp.kodeProdi) as jumlahMahasiswa
